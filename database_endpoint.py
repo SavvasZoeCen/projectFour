@@ -34,7 +34,7 @@ def shutdown_session(response_or_exc):
 -------- Helper methods (feel free to add your own!) -------
 """
 
-def log_message(d)
+def log_message(d):
     # Takes input dictionary d and writes it to the Log table
     print(">>>log_message")
     msg = json.dumps(d)
