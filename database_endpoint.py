@@ -1,4 +1,3 @@
-
 from flask import Flask, request, g
 from flask_restful import Resource, Api
 from sqlalchemy import create_engine, select, MetaData, Table
@@ -101,7 +100,8 @@ def trade():
 def order_book():
     #Your code here
     #Note that you can access the database session using g.session
-    result = {'data': []}
+    orders = g.session.query(Order).options(laod_only("sender_pk", "receiver_pk", "buy_currency", "sell_currency", "buy_amount", "sell_amount", "signature")).all()
+    result = {'data': orders}
     return jsonify(result)
 
 if __name__ == '__main__':
