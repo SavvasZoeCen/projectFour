@@ -20,13 +20,13 @@ app = Flask(__name__)
 @app.before_request
 def create_session():
     g.session = scoped_session(DBSession) #g is an "application global" https://flask.palletsprojects.com/en/1.1.x/api/#application-globals
-    print("create_session>>>")
+    #print("create_session>>>")
 
 @app.teardown_appcontext
 def shutdown_session(response_or_exc):
     g.session.commit()
     g.session.remove()
-    print("shutdown_session>>>")
+    #print("shutdown_session>>>")
 
 """
 -------- Helper methods (feel free to add your own!) -------
@@ -38,7 +38,7 @@ def log_message(d):
     log = Log(message = msg)
     g.session.add(log)
     g.session.commit()
-    print("log_message>>>")
+    #print("log_message>>>")
 
 """
 ---------------- Endpoints ----------------
@@ -46,7 +46,7 @@ def log_message(d):
     
 @app.route('/trade', methods=['POST'])
 def trade():
-    print(">>>trade")
+    #print(">>>trade")
     if request.method == "POST":
         content = request.get_json(silent=True)
         print( f"content = {json.dumps(content)}" )
@@ -105,12 +105,12 @@ def trade():
 def order_book():
     #Your code here
     #Note that you can access the database session using g.session
-    print(">>>order_book")
+    #print(">>>order_book")
     l = []
     orders = g.session.query(Order).options(load_only("sender_pk", "receiver_pk", "buy_currency", "sell_currency", "buy_amount", "sell_amount", "signature")).all()
     for order in orders:
         d = {"sender_pk": order.sender_pk, "receiver_pk": order.receiver_pk, "buy_currency": order.buy_currency, "sell_currency": order.sell_currency, "buy_amount": order.buy_amount, "sell_amount": order.sell_amount, "signature": order.signature}
-        print("      ", d)
+        #print("      ", d)
         l.append(d)
     result = {'data': l}
     return jsonify(result)
