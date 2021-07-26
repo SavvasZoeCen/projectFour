@@ -92,7 +92,7 @@ def trade():
         #If the signature verifies, store the signature, as well as all of the fields under the ‘payload’ in the “Order” table EXCEPT for 'platform'.
         if ver:
             del content['payload']['platform']
-            content['payload']['sig'] = sig
+            content['payload']['signature'] = sig
             order = Order(**{f:content['payload'][f] for f in content['payload']})
             g.session.add(order)
             g.session.commit()
