@@ -79,7 +79,7 @@ def trade():
         payload_pk = content['payload']['sender_pk']
         payload = json.dumps(content['payload'])
         #verify the payload using the sender_pk.
-        if content['payload']['platform'] == 'Algorand':
+        if c['platform'] == 'Algorand':
             ver = algosdk.util.verify_bytes(payload.encode('utf-8'), sig, payload_pk)
         elif content['payload']['platform'] == 'Ethereum':
             eth_encoded_msg = eth_account.messages.encode_defunct(text=payload)
@@ -89,10 +89,11 @@ def trade():
             log_message(content)
             return jsonify( False )
             
-        #If the signature verifies, store the signature, as well as all of the fields under the ‘payload’ in the “Order” table EXCEPT for 'platform’.
+        #If the signature verifies, store the signature, as well as all of the fields under the ‘payload’ in the “Order” table EXCEPT for 'platform'.
         if ver:
-            fields = ["sender_pk", "receiver_pk", "buy_currency", "sell_currency", "buy_amount", "sell_amount"]
-            order = Order(**{content['sig'] + f:order[f] for f in fields})
+            del content['payload']['platform']
+            content['payload']['sig'] = sig
+            order = Order(**{f:content['payload'][f] for f in content['payload']})
             g.session.add(order)
             g.session.commit()
             return jsonify( True )
