@@ -79,7 +79,7 @@ def trade():
         payload_pk = content['payload']['sender_pk']
         payload = json.dumps(content['payload'])
         #verify the payload using the sender_pk.
-        if c['platform'] == 'Algorand':
+        if content['payload']['platform'] == 'Algorand':
             ver = algosdk.util.verify_bytes(payload.encode('utf-8'), sig, payload_pk)
         elif content['payload']['platform'] == 'Ethereum':
             eth_encoded_msg = eth_account.messages.encode_defunct(text=payload)
