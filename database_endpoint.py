@@ -49,7 +49,7 @@ def trade():
     print(">>>trade")
     if request.method == "POST":
         content = request.get_json(silent=True)
-        print( ">>>>>>>>>>>>>>>>>>>>>", f"content = {json.dumps(content)}" )
+        print( f"content = {json.dumps(content)}" )
         columns = [ "sender_pk", "receiver_pk", "buy_currency", "sell_currency", "buy_amount", "sell_amount", "platform" ]
         fields = [ "sig", "payload" ]
         error = False
@@ -106,11 +106,13 @@ def order_book():
     #Your code here
     #Note that you can access the database session using g.session
     print(">>>order_book")
+    l = []
     orders = g.session.query(Order).options(load_only("sender_pk", "receiver_pk", "buy_currency", "sell_currency", "buy_amount", "sell_amount", "signature")).all()
     for order in orders:
-        print("    ", order)
-    result = {'data': orders}
-    print("order_book>>>")
+        d = {"sender_pk": order.sender_pk, "receiver_pk": order.receiver_pk, "buy_currency": order.buy_currency, "sell_currency": order.sell_currency, "buy_amount": order.buy_amount, "sell_amount": order.sell_amount, "signature": order.signature}
+        print("      ", d)
+        l.append(d)
+    result = {'data': l}
     return jsonify(result)
 
 if __name__ == '__main__':
