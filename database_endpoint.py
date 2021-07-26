@@ -109,7 +109,7 @@ def order_book():
     #Your code here
     #Note that you can access the database session using g.session
     print(">>>order_book")
-    orders = g.session.query(Order).options(laod_only("sender_pk", "receiver_pk", "buy_currency", "sell_currency", "buy_amount", "sell_amount", "signature")).all()
+    orders = g.session.query(Order).options(load_only("sender_pk", "receiver_pk", "buy_currency", "sell_currency", "buy_amount", "sell_amount", "signature")).all()
     print("~~~~~~~~~~~~~", orders)
     result = {'data': orders}
     print(">>>order_book")
